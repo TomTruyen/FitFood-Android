@@ -2,4 +2,14 @@
 <resources>
 
     <style name="Theme.FitFood" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.FitFood.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#39354D</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.FitFood</item>
+
+        <item name="android:statusBarColor">#39354D</item>
+        <item name="android:navigationBarColor">#39354D</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
 </resources>
