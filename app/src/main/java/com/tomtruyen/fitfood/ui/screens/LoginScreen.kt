@@ -55,7 +55,8 @@ fun LoginScreen() {
                 style = MaterialTheme.typography.titleLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = Dimens.PaddingNormal)
             )
 
@@ -67,7 +68,8 @@ fun LoginScreen() {
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = Dimens.PaddingNormal)
             )
 
@@ -80,7 +82,8 @@ fun LoginScreen() {
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Done
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = Dimens.PaddingSmall)
             )
 
@@ -89,8 +92,14 @@ fun LoginScreen() {
                 onClick = { /*TODO*/ },
             )
 
+            Buttons.Google(
+                text = stringResource(id = R.string.button_login_google),
+                onClick = { /*TODO*/ }
+            )
+
             // TODO: Add register Button
             // TODO: Add Google Login Button
+            // TODO: Add validation on SignIn Click so we don't have to make a request to the server
         }
     }
 }
