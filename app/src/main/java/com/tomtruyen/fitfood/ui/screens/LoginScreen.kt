@@ -1,5 +1,6 @@
 package com.tomtruyen.fitfood.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,10 +19,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseUser
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.tomtruyen.fitfood.Dimens
 import com.tomtruyen.fitfood.R
+import com.tomtruyen.fitfood.managers.AuthManager
+import com.tomtruyen.fitfood.models.AuthCallback
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 import com.tomtruyen.fitfood.ui.screens.shared.TextFields
 import com.tomtruyen.fitfood.ui.theme.DarkGunMetal
@@ -32,6 +36,19 @@ import com.tomtruyen.fitfood.ui.theme.DarkGunMetal
 fun LoginScreen() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val authCallback = remember {
+        object: AuthCallback {
+            override fun onSuccess(user: FirebaseUser) {
+                Log.d("@@@", "Login Success: ${user.email}")
+            }
+
+            override fun onFailure(error: String) {
+                Log.d("@@@", "Login Failure: $error")
+            }
+
+        }
+    }
 
     Scaffold {
         Column(
@@ -89,16 +106,16 @@ fun LoginScreen() {
 
             Buttons.Default(
                 text = stringResource(id = R.string.button_login),
-                onClick = { /*TODO*/ },
+                onClick = { AuthManager.loginWithEmailAndPassword(email, password, authCallback) },
             )
 
             Buttons.Google(
                 text = stringResource(id = R.string.button_login_google),
-                onClick = { /*TODO*/ }
+                onSignInResult = authCallback
             )
 
             // TODO: Add register Button
-            // TODO: Add Google Login Button
+            // TODO: Add Error messages for login (also format the Firebase Auth messages to custom messages) --> Currently only logged in Console
             // TODO: Add validation on SignIn Click so we don't have to make a request to the server
         }
     }

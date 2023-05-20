@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">FitFood</string>
+
+    <string name="google_cloud_platform_id">449678009817-5urh0l867c1qkd3sv95i3juq5gthlik5.apps.googleusercontent.com</string>
+
     <string name="title_login">Welcome back!</string>
     <string name="subtitle_login">Sign in to continue on your path</string>
     <string name="button_login">Sign in</string>
@@ -8,5 +11,6 @@
     <string name="placeholder_password">Password</string>
     <string name="content_description_hide_password">Hide password</string>
     <string name="content_description_show_password">Show password</string>
+    <string name="error_google_sign_in_failed">Google sign in failed</string>
 
 </resources>

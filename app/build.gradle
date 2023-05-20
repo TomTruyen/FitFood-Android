@@ -10,6 +10,15 @@ android {
     namespace 'com.tomtruyen.fitfood'
     compileSdk 33
 
+    signingConfigs {
+        release {
+            storeFile file('C:\\key.jks')
+            storePassword 'Stawrejo9'
+            keyAlias 'key'
+            keyPassword 'Stawrejo9'
+        }
+    }
+
     defaultConfig {
         applicationId "com.tomtruyen.fitfood"
         minSdk 26
@@ -27,6 +36,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
