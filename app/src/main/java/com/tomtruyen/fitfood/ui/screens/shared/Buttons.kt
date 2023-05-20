@@ -10,10 +10,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -53,6 +50,27 @@ object Buttons {
             shape = shape,
             modifier = modifier
 
+        ) {
+            Text(
+                text = text
+            )
+        }
+    }
+
+    @Composable
+    fun Text(
+        text: String,
+        onClick: () -> Unit,
+        shape: Shape = MaterialTheme.shapes.medium,
+        modifier: Modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = Dimens.PaddingNormal)
+            .clip(MaterialTheme.shapes.medium)
+    ) {
+        TextButton(
+            onClick = onClick,
+            shape = shape,
+            modifier = modifier
         ) {
             Text(
                 text = text

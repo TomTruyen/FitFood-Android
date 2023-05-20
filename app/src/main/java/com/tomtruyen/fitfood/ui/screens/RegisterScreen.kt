@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,21 +26,22 @@ import com.tomtruyen.fitfood.models.AuthCallback
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 import com.tomtruyen.fitfood.ui.screens.shared.TextFields
 
-@RootNavGraph(start = true)
+@RootNavGraph
 @Destination
 @Composable
-fun LoginScreen() {
+fun RegisterScreen() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var repeatPassword by remember { mutableStateOf("") }
 
     val authCallback = remember {
         object: AuthCallback {
             override fun onSuccess(user: FirebaseUser) {
-                Log.d("@@@", "Login Success: ${user.email}")
+                Log.d("@@@", "Register Success: ${user.email}")
             }
 
             override fun onFailure(error: String) {
-                Log.d("@@@", "Login Failure: $error")
+                Log.d("@@@", "Register Failure: $error")
             }
 
         }
@@ -54,7 +57,7 @@ fun LoginScreen() {
                 .padding(Dimens.PaddingNormal)
         ) {
             Text(
-                text = stringResource(id = R.string.title_login),
+                text = stringResource(id = R.string.lets_get_started),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
@@ -62,7 +65,7 @@ fun LoginScreen() {
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = stringResource(id = R.string.subtitle_login),
+                text = stringResource(id = R.string.subtitle_register),
                 style = MaterialTheme.typography.titleLarge.copy(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 ),
@@ -98,32 +101,36 @@ fun LoginScreen() {
                     .padding(top = Dimens.PaddingSmall)
             )
 
+            TextFields.Default(
+                value = repeatPassword,
+                onValueChange = { repeatPassword = it },
+                placeholder = stringResource(id = R.string.placeholder_password_repeat),
+                obscureText = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.PaddingSmall)
+            )
+
             Buttons.Default(
                 text = stringResource(id = R.string.button_login),
-                onClick = { AuthManager.loginWithEmailAndPassword(email, password, authCallback) },
+                onClick = { AuthManager.registerWithEmailAndPassword(email, password, authCallback) },
             )
 
             Buttons.Text(
-                text = stringResource(id = R.string.need_account),
+                text = stringResource(id = R.string.have_an_account),
                 onClick = {
                 }
             )
-
-            Buttons.Google(
-                text = stringResource(id = R.string.button_login_google),
-                onSignInResult = authCallback
-            )
-
-            // TODO: Add navigation between register and login
-            // TODO: Add Error messages for login (also format the Firebase Auth messages to custom messages) --> Currently only logged in Console
-            // TODO: Add validation on SignIn Click so we don't have to make a request to the server
-            // TODO: Add navigation after login and loading indicator to buttons while requesting
         }
     }
 }
 
 @Preview
 @Composable
-fun LoginScreenPreview() {
-    LoginScreen()
+fun RegisterScreenPreview() {
+    RegisterScreen()
 }
