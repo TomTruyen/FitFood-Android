@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +22,7 @@ import com.tomtruyen.fitfood.managers.AuthManager
 import com.tomtruyen.fitfood.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 
+@OptIn(ExperimentalComposeUiApi::class)
 @RootNavGraph
 @Destination
 @Composable

@@ -21,5 +21,6 @@
     <string name="error_weak_password">Password is too weak</string>
     <string name="error_wrong_credentials">Invalid credentials</string>
     <string name="error_email_already_exists">Email is already used</string>
+    <string name="error_google_sign_in_cancelled">Google sign in cancelled</string>
 
 </resources>

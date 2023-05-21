@@ -8,8 +8,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -29,6 +31,7 @@ import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 import com.tomtruyen.fitfood.ui.screens.shared.TextFields
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @RootNavGraph
 @Destination
 @Composable
@@ -36,9 +39,12 @@ fun RegisterScreen(navController: NavController) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
 
     val authCallback = remember {
         object: AuthCallback {
@@ -47,8 +53,10 @@ fun RegisterScreen(navController: NavController) {
             }
 
             override fun onFailure(error: String) {
+                isLoading = false
                 // Display Snackbar with Error
                 scope.launch {
+                    snackbarHostState.currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(error)
                 }
             }
@@ -60,82 +68,102 @@ fun RegisterScreen(navController: NavController) {
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(Dimens.PaddingNormal)
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.fillMaxSize()
         ) {
-            Text(
-                text = stringResource(id = R.string.lets_get_started),
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.SemiBold
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                text = stringResource(id = R.string.subtitle_register),
-                style = MaterialTheme.typography.titleLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                ),
+            if (isLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Start)
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = Dimens.PaddingNormal)
-            )
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(Dimens.PaddingNormal)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.lets_get_started),
+                    style = MaterialTheme.typography.headlineLarge.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    text = stringResource(id = R.string.subtitle_register),
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = Dimens.PaddingNormal)
+                )
 
-            TextFields.Default(
-                value = email,
-                onValueChange = { email = it },
-                placeholder = stringResource(id = R.string.placeholder_email),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = Dimens.PaddingNormal)
-            )
+                TextFields.Default(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholder = stringResource(id = R.string.placeholder_email),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Dimens.PaddingNormal)
+                )
 
-            TextFields.Default(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = stringResource(id = R.string.placeholder_password),
-                obscureText = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = Dimens.PaddingSmall)
-            )
+                TextFields.Default(
+                    value = password,
+                    onValueChange = { password = it },
+                    placeholder = stringResource(id = R.string.placeholder_password),
+                    obscureText = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Dimens.PaddingSmall)
+                )
 
-            TextFields.Default(
-                value = repeatPassword,
-                onValueChange = { repeatPassword = it },
-                placeholder = stringResource(id = R.string.placeholder_password_repeat),
-                obscureText = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = Dimens.PaddingSmall)
-            )
+                TextFields.Default(
+                    value = repeatPassword,
+                    onValueChange = { repeatPassword = it },
+                    placeholder = stringResource(id = R.string.placeholder_password_repeat),
+                    obscureText = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = Dimens.PaddingSmall)
+                )
 
-            Buttons.Default(
-                text = stringResource(id = R.string.button_register),
-                onClick = { AuthManager.registerWithEmailAndPassword(email, password, authCallback) },
-            )
 
-            Buttons.Text(
-                text = stringResource(id = R.string.have_an_account),
-                onClick = {
-                    navController.navigate(LoginScreenDestination)
-                }
-            )
+                Buttons.Default(
+                    text = stringResource(id = R.string.button_register),
+                    keyboardController = keyboardController,
+                    onClick = {
+                        isLoading = true
+                        AuthManager.registerWithEmailAndPassword(email, password, authCallback)
+                    },
+                )
+
+                Buttons.Text(
+                    text = stringResource(id = R.string.have_an_account),
+                    keyboardController = keyboardController,
+                    onClick = {
+                        navController.navigate(LoginScreenDestination)
+                    }
+                )
+            }
         }
     }
 }

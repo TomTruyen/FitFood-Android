@@ -9,11 +9,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import com.tomtruyen.fitfood.Dimens
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -23,10 +26,12 @@ import com.tomtruyen.fitfood.managers.AuthManager
 import com.tomtruyen.fitfood.models.AuthCallback
 
 object Buttons {
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Default(
         text: String,
         onClick: () -> Unit,
+        keyboardController: SoftwareKeyboardController? = null,
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
             .fillMaxWidth()
@@ -34,7 +39,10 @@ object Buttons {
             .clip(MaterialTheme.shapes.medium)
     ) {
         Button(
-            onClick = onClick,
+            onClick = {
+                keyboardController?.hide()
+                onClick()
+            },
             shape = shape,
             modifier = modifier
 
@@ -45,10 +53,12 @@ object Buttons {
         }
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Text(
         text: String,
         onClick: () -> Unit,
+        keyboardController: SoftwareKeyboardController? = null,
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +66,10 @@ object Buttons {
             .clip(MaterialTheme.shapes.medium)
     ) {
         TextButton(
-            onClick = onClick,
+            onClick = {
+                keyboardController?.hide()
+                onClick()
+            },
             shape = shape,
             modifier = modifier
         ) {
@@ -66,9 +79,12 @@ object Buttons {
         }
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     fun Google(
         text: String,
+        keyboardController: SoftwareKeyboardController? = null,
+        onClick: () -> Unit,
         onSignInResult: AuthCallback,
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
@@ -98,11 +114,15 @@ object Buttons {
                 } else {
                     onSignInResult.onFailure(context.getString(R.string.error_google_sign_in_failed))
                 }
+            } else {
+                onSignInResult.onFailure(context.getString(R.string.error_google_sign_in_cancelled))
             }
         }
 
         Button(
             onClick = {
+                keyboardController?.hide()
+                onClick()
                 client.beginSignIn(request).addOnCompleteListener { task ->
                     if(task.isSuccessful) {
                         val intentSender = task.result.pendingIntent.intentSender
