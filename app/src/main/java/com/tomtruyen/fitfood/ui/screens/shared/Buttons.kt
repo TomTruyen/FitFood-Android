@@ -109,7 +109,6 @@ object Buttons {
                         val intentSenderRequest = IntentSenderRequest.Builder(intentSender).build()
                         signInResultLauncher.launch(intentSenderRequest)
                     } else {
-                        Log.d("@@@", "Error: ${task.exception}")
                         onSignInResult.onFailure(context.getString(R.string.error_google_sign_in_failed))
                     }
                 }
@@ -123,7 +122,7 @@ object Buttons {
             Image(
                 painter = painterResource(id = R.drawable.ic_logo_google),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(20.dp),
             )
             Spacer(modifier = Modifier.width(Dimens.PaddingTiny))
             Text(
