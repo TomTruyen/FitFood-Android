@@ -2,13 +2,13 @@ package com.tomtruyen.fitfood.ui.screens.shared
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,9 +16,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.tomtruyen.fitfood.ui.theme.DarkGunMetal
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -50,6 +49,8 @@ object TextFields {
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
     ) {
+        val focusManager = LocalFocusManager.current
+
         var obscureTextVisible by rememberSaveable { mutableStateOf(false) }
 
         Column(modifier = modifier) {
@@ -67,6 +68,11 @@ object TextFields {
                 },
                 isError = !error.isNullOrEmpty(),
                 keyboardOptions = keyboardOptions,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                ),
                 singleLine = true,
                 colors = colors,
                 shape = shape,
