@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,11 +27,15 @@ import com.tomtruyen.fitfood.models.AuthCallback
 import com.tomtruyen.fitfood.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 import com.tomtruyen.fitfood.ui.screens.shared.TextFields
+import kotlinx.coroutines.launch
 
 @RootNavGraph
 @Destination
 @Composable
 fun RegisterScreen(navController: NavController) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
@@ -45,13 +47,17 @@ fun RegisterScreen(navController: NavController) {
             }
 
             override fun onFailure(error: String) {
-                Log.d("@@@", "Register Failure: $error")
+                // Display Snackbar with Error
+                scope.launch {
+                    snackbarHostState.showSnackbar(error)
+                }
             }
-
         }
     }
 
-    Scaffold {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,

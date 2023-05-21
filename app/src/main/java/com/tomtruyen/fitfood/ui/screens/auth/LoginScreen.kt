@@ -28,11 +28,15 @@ import com.tomtruyen.fitfood.ui.screens.destinations.RegisterScreenDestination
 import com.tomtruyen.fitfood.ui.screens.destinations.HomeScreenDestination
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 import com.tomtruyen.fitfood.ui.screens.shared.TextFields
+import kotlinx.coroutines.launch
 
 @RootNavGraph(start = true)
 @Destination
 @Composable
 fun LoginScreen(navController: NavController) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -43,13 +47,17 @@ fun LoginScreen(navController: NavController) {
             }
 
             override fun onFailure(error: String) {
-                Log.d("@@@", "Login Failure: $error")
+                // Display Snackbar with Error
+                scope.launch {
+                    snackbarHostState.showSnackbar(error)
+                }
             }
-
         }
     }
 
-    Scaffold {
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -120,9 +128,6 @@ fun LoginScreen(navController: NavController) {
                 }
             )
 
-
-
-            // TODO: Add Error messages for login (also format the Firebase Auth messages to custom messages) --> Currently only logged in Console
             // TODO: Add validation on SignIn Click so we don't have to make a request to the server
             // TODO: loading indicator to buttons while requesting
         }

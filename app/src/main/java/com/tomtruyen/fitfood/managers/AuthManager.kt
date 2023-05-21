@@ -7,8 +7,7 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import com.tomtruyen.fitfood.BuildConfig
 import com.tomtruyen.fitfood.R
 import com.tomtruyen.fitfood.models.AuthCallback
@@ -32,7 +31,7 @@ object AuthManager {
                 if(task.isSuccessful && auth.currentUser != null) {
                     callback.onSuccess(auth.currentUser!!)
                 } else {
-                    callback.onFailure(task.exception?.message.toString())
+                    callback.onFailure(formatException(task.exception!!))
                 }
             }
     }
@@ -43,7 +42,7 @@ object AuthManager {
                 if(task.isSuccessful && auth.currentUser != null) {
                     callback.onSuccess(auth.currentUser!!)
                 } else {
-                    callback.onFailure(task.exception?.message.toString())
+                    callback.onFailure(formatException(task.exception!!))
                 }
             }
     }
@@ -68,8 +67,29 @@ object AuthManager {
                 if(task.isSuccessful && auth.currentUser != null) {
                     onSignInResult.onSuccess(auth.currentUser!!)
                 } else {
-                    onSignInResult.onFailure(task.exception?.message.toString())
+                    onSignInResult.onFailure(formatException(task.exception!!))
                 }
             }
+    }
+
+    private fun formatException(exception: Exception): String {
+        return when(exception) {
+            is FirebaseAuthWeakPasswordException -> {
+                // Weak Password
+                ResourceProvider.getString(R.string.error_weak_password)
+            }
+            is FirebaseAuthInvalidUserException -> {
+                // Wrong Credentials
+                ResourceProvider.getString(R.string.error_wrong_credentials)
+            }
+            is FirebaseAuthUserCollisionException -> {
+                // User already exists
+                ResourceProvider.getString(R.string.error_email_already_exists)
+            }
+            else -> {
+                // Default
+                exception.message.toString()
+            }
+        }
     }
 }

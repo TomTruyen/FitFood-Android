@@ -73,7 +73,7 @@ object Buttons {
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
             .fillMaxWidth()
-            .padding(top = Dimens.PaddingSmall)
+            .padding(top = Dimens.PaddingTiny)
             .clip(MaterialTheme.shapes.medium)
     ) {
         val context = LocalContext.current

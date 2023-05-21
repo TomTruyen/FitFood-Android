@@ -18,5 +18,8 @@
     <string name="subtitle_register">Create an account to get started</string>
     <string name="placeholder_password_repeat">Repeat password</string>
     <string name="button_register">Sign up</string>
+    <string name="error_weak_password">Password is too weak</string>
+    <string name="error_wrong_credentials">Invalid credentials</string>
+    <string name="error_email_already_exists">Email is already used</string>
 
 </resources>
