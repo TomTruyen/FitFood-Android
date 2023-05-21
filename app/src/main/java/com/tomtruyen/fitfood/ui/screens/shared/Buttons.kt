@@ -1,10 +1,7 @@
 package com.tomtruyen.fitfood.ui.screens.shared
 
 import android.app.Activity
-import android.app.Instrumentation.ActivityResult
-import android.os.Build
 import android.util.Log
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,7 +9,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -22,17 +18,9 @@ import com.tomtruyen.fitfood.Dimens
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.auth.api.credentials.Credential
-import com.google.android.gms.auth.api.credentials.Credential.EXTRA_KEY
-import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInCredential
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Status
 import com.tomtruyen.fitfood.R
 import com.tomtruyen.fitfood.managers.AuthManager
 import com.tomtruyen.fitfood.models.AuthCallback
-import com.tomtruyen.fitfood.ui.screens.LoginScreen
 
 object Buttons {
     @Composable

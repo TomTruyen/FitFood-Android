@@ -8,7 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.tomtruyen.fitfood.ui.screens.LoginScreen
+import androidx.navigation.compose.rememberNavController
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.dependency
+import com.tomtruyen.fitfood.ui.screens.NavGraphs
 import com.tomtruyen.fitfood.ui.theme.FitFoodTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,12 +22,20 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FitFoodTheme {
+                val navController = rememberNavController()
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen()
+                    DestinationsNavHost(
+                        navGraph = NavGraphs.root,
+                        navController = navController,
+                        dependenciesContainerBuilder = {
+                            dependency(navController)
+                        }
+                    )
                 }
             }
         }

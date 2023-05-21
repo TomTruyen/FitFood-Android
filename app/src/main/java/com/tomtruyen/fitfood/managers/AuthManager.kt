@@ -16,6 +16,8 @@ import com.tomtruyen.fitfood.models.AuthCallback
 object AuthManager {
     private val auth = FirebaseAuth.getInstance()
 
+    fun getUser() = auth.currentUser
+
     fun isLoggedIn(): Boolean {
         return auth.currentUser != null
     }

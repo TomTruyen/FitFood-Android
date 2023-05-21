@@ -17,5 +17,6 @@
     <string name="lets_get_started">Let\'s get started!</string>
     <string name="subtitle_register">Create an account to get started</string>
     <string name="placeholder_password_repeat">Repeat password</string>
+    <string name="button_register">Sign up</string>
 
 </resources>
