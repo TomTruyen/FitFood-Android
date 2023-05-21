@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import be.appwise.core.validation.ValidationResult
 import com.google.firebase.auth.FirebaseUser
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -29,6 +30,13 @@ import com.tomtruyen.fitfood.models.AuthCallback
 import com.tomtruyen.fitfood.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 import com.tomtruyen.fitfood.ui.screens.shared.TextFields
+import com.tomtruyen.fitfood.validation.TextValidator
+import com.tomtruyen.fitfood.validation.errorMessage
+import com.tomtruyen.fitfood.validation.isValid
+import com.tomtruyen.fitfood.validation.rules.EmailRule
+import com.tomtruyen.fitfood.validation.rules.MatchingPasswordsRule
+import com.tomtruyen.fitfood.validation.rules.PasswordRule
+import com.tomtruyen.fitfood.validation.rules.RequiredRule
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -36,6 +44,7 @@ import kotlinx.coroutines.launch
 @Destination
 @Composable
 fun RegisterScreen(navController: NavController) {
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -45,6 +54,31 @@ fun RegisterScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
+
+    val emailValidator = remember {
+        TextValidator.withRules(EmailRule())
+    }
+
+    val passwordValidator = remember {
+        TextValidator.withRules(PasswordRule())
+    }
+
+    var emailValidationResult by remember { mutableStateOf(null as ValidationResult?) }
+    var passwordValidationResult by remember { mutableStateOf(null as ValidationResult?) }
+    var repeatPasswordValidationResult by remember { mutableStateOf(null as ValidationResult?) }
+
+    DisposableEffect(email) {
+        onDispose {
+            emailValidationResult = emailValidator.validate(context, email)
+        }
+    }
+
+    DisposableEffect(password, repeatPassword) {
+        onDispose {
+            passwordValidationResult = passwordValidator.validate(context, password)
+            repeatPasswordValidationResult = TextValidator.withRules(MatchingPasswordsRule(password)).validate(context, repeatPassword)
+        }
+    }
 
     val authCallback = remember {
         object: AuthCallback {
@@ -109,6 +143,7 @@ fun RegisterScreen(navController: NavController) {
                     value = email,
                     onValueChange = { email = it },
                     placeholder = stringResource(id = R.string.placeholder_email),
+                    error = emailValidationResult.errorMessage(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next
@@ -122,6 +157,7 @@ fun RegisterScreen(navController: NavController) {
                     value = password,
                     onValueChange = { password = it },
                     placeholder = stringResource(id = R.string.placeholder_password),
+                    error = passwordValidationResult.errorMessage(),
                     obscureText = true,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
@@ -136,6 +172,7 @@ fun RegisterScreen(navController: NavController) {
                     value = repeatPassword,
                     onValueChange = { repeatPassword = it },
                     placeholder = stringResource(id = R.string.placeholder_password_repeat),
+                    error = repeatPasswordValidationResult.errorMessage(),
                     obscureText = true,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
@@ -150,6 +187,9 @@ fun RegisterScreen(navController: NavController) {
                 Buttons.Default(
                     text = stringResource(id = R.string.button_register),
                     keyboardController = keyboardController,
+                    enabled = emailValidationResult?.isValid() == true
+                            && passwordValidationResult?.isValid() == true
+                            && repeatPasswordValidationResult?.isValid() == true,
                     onClick = {
                         isLoading = true
                         AuthManager.registerWithEmailAndPassword(email, password, authCallback)

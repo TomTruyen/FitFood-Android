@@ -32,6 +32,7 @@ object Buttons {
         text: String,
         onClick: () -> Unit,
         keyboardController: SoftwareKeyboardController? = null,
+        enabled: Boolean = true,
         shape: Shape = MaterialTheme.shapes.medium,
         modifier: Modifier = Modifier
             .fillMaxWidth()
@@ -43,6 +44,7 @@ object Buttons {
                 keyboardController?.hide()
                 onClick()
             },
+            enabled = enabled,
             shape = shape,
             modifier = modifier
 
