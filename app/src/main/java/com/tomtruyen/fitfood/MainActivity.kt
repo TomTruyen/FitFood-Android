@@ -32,11 +32,10 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(Unit) {
                     if(AuthManager.isLoggedIn()) {
-                        navController.navigate(HomeScreenDestination) {
-                            popUpTo(LoginScreenDestination.route) {
-                                inclusive = true
-                            }
-                        }
+                        navController.navigateAndClearBackstack(
+                            direction = HomeScreenDestination,
+                            untilDirection = LoginScreenDestination
+                        )
                     }
                 }
 

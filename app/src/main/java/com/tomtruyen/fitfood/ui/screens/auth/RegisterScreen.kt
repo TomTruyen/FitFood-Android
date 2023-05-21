@@ -27,7 +27,9 @@ import com.tomtruyen.fitfood.Dimens
 import com.tomtruyen.fitfood.R
 import com.tomtruyen.fitfood.managers.AuthManager
 import com.tomtruyen.fitfood.models.AuthCallback
+import com.tomtruyen.fitfood.navigateAndClearBackstack
 import com.tomtruyen.fitfood.ui.screens.destinations.LoginScreenDestination
+import com.tomtruyen.fitfood.ui.screens.destinations.RegisterScreenDestination
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 import com.tomtruyen.fitfood.ui.screens.shared.TextFields
 import com.tomtruyen.fitfood.validation.TextValidator
@@ -83,7 +85,10 @@ fun RegisterScreen(navController: NavController) {
     val authCallback = remember {
         object: AuthCallback {
             override fun onSuccess(user: FirebaseUser) {
-                navController.navigate(LoginScreenDestination)
+                navController.navigateAndClearBackstack(
+                    direction = LoginScreenDestination,
+                    untilDirection = RegisterScreenDestination
+                )
             }
 
             override fun onFailure(error: String) {
@@ -200,7 +205,10 @@ fun RegisterScreen(navController: NavController) {
                     text = stringResource(id = R.string.have_an_account),
                     keyboardController = keyboardController,
                     onClick = {
-                        navController.navigate(LoginScreenDestination)
+                        navController.navigateAndClearBackstack(
+                            direction = LoginScreenDestination,
+                            untilDirection = RegisterScreenDestination
+                        )
                     }
                 )
             }

@@ -16,9 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitfood.Dimens
 import com.tomtruyen.fitfood.managers.AuthManager
+import com.tomtruyen.fitfood.navigateAndClearBackstack
+import com.tomtruyen.fitfood.ui.screens.destinations.HomeScreenDestination
 import com.tomtruyen.fitfood.ui.screens.destinations.LoginScreenDestination
 import com.tomtruyen.fitfood.ui.screens.shared.Buttons
 
@@ -40,7 +41,10 @@ fun HomeScreen(navController: NavController) {
                 text = "Sign out",
                 onClick = {
                     AuthManager.logout()
-                    navController.navigate(LoginScreenDestination)
+                    navController.navigateAndClearBackstack(
+                        direction = LoginScreenDestination,
+                        untilDirection = HomeScreenDestination
+                    )
                 }
             )
         }
