@@ -166,7 +166,7 @@ fun RegisterScreen(navController: NavController) {
                     obscureText = true,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
+                        imeAction = ImeAction.Next
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
