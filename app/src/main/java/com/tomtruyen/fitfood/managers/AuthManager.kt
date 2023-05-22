@@ -11,6 +11,10 @@ import com.google.firebase.auth.*
 import com.tomtruyen.fitfood.BuildConfig
 import com.tomtruyen.fitfood.R
 import com.tomtruyen.fitfood.models.AuthCallback
+import io.realm.Realm
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object AuthManager {
     private val auth = FirebaseAuth.getInstance()
@@ -23,6 +27,10 @@ object AuthManager {
 
     fun logout() {
         auth.signOut()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            Realm.getDefaultInstance().deleteAll()
+        }
     }
 
     fun loginWithEmailAndPassword(email: String, password: String, callback: AuthCallback) {
