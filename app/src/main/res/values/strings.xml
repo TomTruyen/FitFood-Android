@@ -25,5 +25,6 @@
     <string name="error_invalid_email">Email is invalid</string>
     <string name="error_required">This field is required</string>
     <string name="error_passwords_match">Passwords don\'t match</string>
-
+    <string name="onboarding_personal_information_title">Tell us something more about yourself</string>
+    <string name="next">Next</string>
 </resources>
