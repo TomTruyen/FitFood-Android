@@ -30,7 +30,9 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.navigate
 import com.tomtruyen.fitfood.Dimens
+import com.tomtruyen.fitfood.ui.screens.destinations.HomeScreenDestination
 import com.tomtruyen.fitfood.ui.screens.shared.composables.IndicatorLineRow
 import com.tomtruyen.fitfood.ui.theme.DarkGunMetal
 import kotlinx.coroutines.launch
@@ -48,12 +50,15 @@ fun OnboardingScreen(navController: NavController) {
 
     val scope = rememberCoroutineScope()
 
-    val pagerState = rememberPagerState { 2 }
+    val pagerState = rememberPagerState { 7 }
 
     fun onContinue() {
         scope.launch {
             if(pagerState.currentPage != pagerState.pageCount - 1) {
                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            } else {
+                // TODO: Add user data to database, then navigate to home screen
+                navController.navigate(HomeScreenDestination)
             }
         }
     }
@@ -79,7 +84,12 @@ fun OnboardingScreen(navController: NavController) {
             ) { page ->
                 when(page) {
                     0 -> OnboardingPersonalInformation(viewModel = viewModel) { onContinue() }
-                    1 -> OnboardingPersonalMeasurements(viewModel = viewModel) { onContinue() }
+                    1 -> OnboardingDateOfBirth(viewModel = viewModel) { onContinue() }
+                    2 -> OnboardingPersonalMeasurements(viewModel = viewModel) { onContinue() }
+                    3 -> OnboardingGoal(viewModel = viewModel) { onContinue() }
+                    4 -> OnboardingExerciseFrequency(viewModel = viewModel) { onContinue() }
+                    5 -> OnboardingTargetWeight(viewModel = viewModel) { onContinue() }
+                    6 -> OnboardingResults(viewModel = viewModel) { onContinue() }
                 }
             }
         }
