@@ -7,4 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class OnboardingViewModel: ViewModel() {
     val gender = MutableStateFlow<Gender?>(null)
+
+    fun setGender(selectedGender: Gender) {
+        if(gender.value == selectedGender) {
+            gender.tryEmit(null)
+            return
+        }
+
+        gender.tryEmit(selectedGender)
+    }
 }

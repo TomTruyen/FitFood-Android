@@ -28,7 +28,7 @@ fun OnboardingPersonalInformation(viewModel: OnboardingViewModel, onContinue: ()
 
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -40,28 +40,26 @@ fun OnboardingPersonalInformation(viewModel: OnboardingViewModel, onContinue: ()
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+                .padding(vertical = Dimens.PaddingNormal)
+                .weight(1f),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             GenderCard(
                 gender = Gender.MALE,
                 selected = gender == Gender.MALE,
-                onClick = { viewModel.gender.tryEmit(Gender.MALE) },
-                modifier = Modifier.weight(1f)
+                onClick = { viewModel.setGender(Gender.MALE) },
+                modifier = Modifier.weight(1f).padding(end = Dimens.PaddingSmall)
             )
-
-            Spacer(modifier = Modifier.width(Dimens.PaddingNormal))
 
             GenderCard(
                 gender = Gender.FEMALE,
                 selected = gender == Gender.FEMALE,
-                onClick = { viewModel.gender.tryEmit(Gender.FEMALE) },
-                modifier = Modifier.weight(1f)
+                onClick = { viewModel.setGender(Gender.FEMALE) },
+                modifier = Modifier.weight(1f).padding(start = Dimens.PaddingSmall)
             )
         }
-
-        // TODO: Add Date of Birth
 
         Buttons.Default(
             text = stringResource(id = R.string.next),

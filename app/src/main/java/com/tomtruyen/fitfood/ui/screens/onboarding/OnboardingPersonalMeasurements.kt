@@ -23,7 +23,7 @@ fun OnboardingPersonalMeasurements(viewModel: OnboardingViewModel, onContinue: (
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // TODO: Add height and weight
+        // TODO: Add height and weight and age (birthday)
 
         Buttons.Default(
             text = stringResource(id = R.string.next),
